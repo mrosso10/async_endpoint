@@ -8,5 +8,6 @@ Gem::Specification.new do |s|
   s.description = ""
   s.license     = "MIT"
 
-  s.files = ["lib/async_endpoint.rb"]
+  s.files = Dir["{app,lib}/**/*", "LICENSE", "README.md"]
+  # s.files = ["lib/async_endpoint.rb"]
 end
