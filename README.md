@@ -2,8 +2,7 @@
 
 ## Summary
 
-This functionality handles the problem of making requests to external API's inside controller
-endpoints.
+Often in our Rails applications we have tasks that may take a lot of time to finish, such as external API requests. This is risky to perform inside our endpoints because it blocks our threads and is not scalable. Here we provide a solution to this problem, using sidekiq to run our heavy work in background
 
 ## Approach
 
