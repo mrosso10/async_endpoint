@@ -60,10 +60,10 @@ window.jQuery.getAsyncEndpoint = (url, max_time_to_wait, async_request_id, async
           $.getAsyncEndpoint url, max_time_to_wait, response.async_request_id, response.async_request_token, jqXHR, start_time
         ), time_elapsed * 0.4 + 1000
       else
-        jqXHR.dispatchError()
+        jqXHR.dispatchError(response, status, xhr)
     else
       jqXHR.dispatchSuccess(response, status, xhr)
-  ).error( ->
-    jqXHR.dispatchError()
+  ).error((response, status, xhr) ->
+    jqXHR.dispatchError(response, status, xhr)
   )
   jqXHR

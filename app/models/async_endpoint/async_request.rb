@@ -60,6 +60,9 @@ module AsyncEndpoint
     def execute
       execute_task
       save
+    rescue StandardError => error
+      failed error.message
+      save
     end
 
     def execute_task

@@ -53,7 +53,7 @@ class MyController < ActionController::Base
                      another_data: @async_request.another_data }
     end
     failed_proc = proc do
-      render json: { error: @async_request.error_message }
+      render json: { error: @async_request.error_message }, status: :unprocessable_entity
     end
     @async_request.handle(done_proc, failed_proc)
   end
