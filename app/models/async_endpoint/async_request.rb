@@ -62,6 +62,9 @@ module AsyncEndpoint
       save
     rescue StandardError => error
       failed "#{error.class}: #{error.message}"
+      AsyncEndpoint.configuration.error_handlers.each do |handler|
+        handler.call(error)
+      end
       save
     end
 
