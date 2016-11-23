@@ -61,7 +61,7 @@ module AsyncEndpoint
       execute_task
       save
     rescue StandardError => error
-      failed error.message
+      failed "#{error.class}: #{error.message}"
       save
     end
 
