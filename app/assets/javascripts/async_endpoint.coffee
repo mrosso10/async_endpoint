@@ -1,48 +1,48 @@
 JQueryXHR = ->
-  _error = null
-  _success = null
-  _complete = null
+  _fail = null
+  _done = null
+  _always = null
   _arguments = null
-  successCallbacks = []
-  errorCallbacks = []
-  completeCallbacks = []
+  doneCallbacks = []
+  failCallbacks = []
+  alwaysCallbacks = []
 
-  @success = (callback) ->
-    if _success
+  @done = (callback) ->
+    if _done
       callback.apply this, _arguments
-    successCallbacks.push callback
+    doneCallbacks.push callback
     this
 
-  @error = (callback) ->
-    if _error
+  @fail = (callback) ->
+    if _fail
       callback.apply this, _arguments
-    errorCallbacks.push callback
+    failCallbacks.push callback
     this
 
-  @complete = (callback) ->
-    if _complete
+  @always = (callback) ->
+    if _always
       callback.apply this, _arguments
-    completeCallbacks.push callback
+    alwaysCallbacks.push callback
     this
 
-  @dispatchSuccess = ->
+  @dispatchDone = ->
     `var i`
     _arguments = arguments
-    _complete = _success = true
-    for i of successCallbacks
-      successCallbacks[i].apply this, _arguments
-    for i of completeCallbacks
-      completeCallbacks[i].apply this, _arguments
+    _always = _done = true
+    for i of doneCallbacks
+      doneCallbacks[i].apply this, _arguments
+    for i of alwaysCallbacks
+      alwaysCallbacks[i].apply this, _arguments
     return
 
-  @dispatchError = ->
+  @dispatchFail = ->
     `var i`
     _arguments = arguments
-    _complete = _success = true
-    for i of errorCallbacks
-      errorCallbacks[i].apply this, _arguments
-    for i of completeCallbacks
-      completeCallbacks[i].apply this, _arguments
+    _always = _done = true
+    for i of failCallbacks
+      failCallbacks[i].apply this, _arguments
+    for i of alwaysCallbacks
+      alwaysCallbacks[i].apply this, _arguments
     return
   return
 
@@ -53,17 +53,17 @@ window.jQuery.getAsyncEndpoint = (url, max_time_to_wait, async_request_id, async
   start_time = Date.now() if start_time == undefined
   time_elapsed = Date.now() - start_time
   $.get(url, 'async_request_id': async_request_id, 'async_request_token': async_request_token)
-  .success((response, status, xhr) ->
+  .done((response, status, xhr) ->
     if xhr.status == 202
       if time_elapsed < max_time_to_wait
         setTimeout (->
           $.getAsyncEndpoint url, max_time_to_wait, response.async_request_id, response.async_request_token, jqXHR, start_time
         ), time_elapsed * 0.4 + 1000
       else
-        jqXHR.dispatchError(response, status, xhr)
+        jqXHR.dispatchFail(response, status, xhr)
     else
-      jqXHR.dispatchSuccess(response, status, xhr)
-  ).error((response, status, xhr) ->
-    jqXHR.dispatchError(response, status, xhr)
+      jqXHR.dispatchDone(response, status, xhr)
+  ).fail((response, status, xhr) ->
+    jqXHR.dispatchFail(response, status, xhr)
   )
   jqXHR
