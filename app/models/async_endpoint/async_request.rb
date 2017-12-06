@@ -91,8 +91,9 @@ module AsyncEndpoint
     end
 
     def start_worker
+      update_attributes(status: AsyncRequest.statuses[:processing])
       jid = AsyncEndpointWorker.perform_async(id)
-      update_attributes(jid: jid, status: AsyncRequest.statuses[:processing])
+      update_attributes(jid: jid)
     end
 
     def token_is_valid(token)
