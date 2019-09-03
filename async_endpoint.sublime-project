@@ -1,0 +1,13 @@
+{
+  "folders":
+  [
+    {
+      "path": ".",
+      "binary_file_patterns": ["tmp/*", "log/*"]
+    }
+  ],
+  "settings":
+  {
+      "tab_size": 2
+  },
+}
